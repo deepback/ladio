@@ -36,6 +36,59 @@
         "overlap": "keep_first"
       },
       "upstream_checkpoint_sha256": "6074be2c4d490c5f6101fcc374a1ec72ae93456e23bb6019783b849f5dc7d47b"
+    },
+    "instrument-activity": {
+      "file": "beat-this-small0/InstrumentActivityModel.onnx",
+      "license": "MIT",
+      "source": "LADIO fine-tuned model; supplied by the project author",
+      "purpose": "Оценка активности vocals, drums, bass и others для выбора музыкальных событий; не разделение аудио",
+      "precision": "float32",
+      "input": {
+        "name": "MelSpectrogram",
+        "shape": [
+          1,
+          "frames",
+          128,
+          1
+        ]
+      },
+      "outputs": [
+        "vocals",
+        "drums",
+        "bass",
+        "others"
+      ],
+      "frontend": "magnitude-slaney-A-dB-24k-v1",
+      "sha256": "feb96f0fb9888b405b5448712b7b60ba2bb6b8469f1bd9295541a55917405820",
+      "training_lineage": "Fine-tuning reported by the project author; not independently audited"
+    },
+    "structural-features": {
+      "file": "beat-this-small0/StructuralFeaturesModel.onnx",
+      "license": "MIT",
+      "source": "LADIO fine-tuned model; supplied by the project author",
+      "purpose": "Оценка границ музыкальных фраз, сегментов и секций; не распознавание текста",
+      "precision": "float32",
+      "input": {
+        "name": "MelSpectrogram",
+        "shape": [
+          1,
+          "frames",
+          256,
+          1
+        ]
+      },
+      "outputs": [
+        "phrases",
+        "segments",
+        "sections"
+      ],
+      "additional_outputs_available_but_unused": [
+        "kind",
+        "pace"
+      ],
+      "frontend": "magnitude-slaney-A-dB-24k-v1",
+      "sha256": "c272d7ea0dd7f4cefa69414fd64c592cf8fd8f2b6ea5e41a1071e80171030d5f",
+      "training_lineage": "Fine-tuning reported by the project author; not independently audited"
     }
   },
   "files": {
@@ -54,6 +107,18 @@
     "beat-this-small0/beat-this-small0.onnx": {
       "bytes": 9547177,
       "sha256": "0e5c1164d2528b5ca6ef9dda2cee333c2252e4b3ba158da04887214701886aa0"
+    },
+    "beat-this-small0/InstrumentActivityModel.onnx": {
+      "bytes": 8681395,
+      "sha256": "feb96f0fb9888b405b5448712b7b60ba2bb6b8469f1bd9295541a55917405820"
+    },
+    "beat-this-small0/StructuralFeaturesModel.onnx": {
+      "bytes": 8329121,
+      "sha256": "c272d7ea0dd7f4cefa69414fd64c592cf8fd8f2b6ea5e41a1071e80171030d5f"
+    },
+    "beat-this-small0/event-models.json": {
+      "bytes": 756,
+      "sha256": "a84e2e20882ce36c9680fd34fd887f81dfb5e5a4e9e399e9d72f11678df3e5fd"
     }
   }
 }

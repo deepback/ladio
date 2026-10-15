@@ -27,6 +27,30 @@ def verify(root):
         raise ValueError("Unregistered ONNX model in release")
     if any(m.get("license") != "MIT" for m in manifest["models"].values()):
         raise ValueError("Public model requires explicit distribution review")
+    event_spec = model_root / manifest["runtime"]["model_directory"] / "event-models.json"
+    if event_spec.is_file():
+        event = json.loads(event_spec.read_text())
+        if event.get("enabled"):
+            for filename, identity in event["models"].items():
+                relative = Path(manifest["runtime"]["model_directory"]) / filename
+                asset = (model_root / relative).resolve(strict=True)
+                if not asset.is_relative_to(model_root.resolve()):
+                    raise ValueError("Event model escapes bundle")
+                digest = hashlib.sha256(asset.read_bytes()).hexdigest()
+                model_entry = next((entry for entry in manifest["models"].values()
+                                    if entry["file"] == relative.as_posix()), None)
+                if (asset.stat().st_size != identity["bytes"]
+                        or digest != identity["sha256"]
+                        or model_entry is None
+                        or digest != model_entry.get("sha256")):
+                    raise ValueError(f"Event model identity mismatch: {filename}")
+                fnv = 14695981039346656037
+                with asset.open("rb") as source:
+                    for block in iter(lambda: source.read(65536), b""):
+                        for byte in block:
+                            fnv = ((fnv ^ byte) * 1099511628211) & ((1 << 64) - 1)
+                if f"{fnv:016x}" != identity["fnv1a64"]:
+                    raise ValueError(f"Event model runtime checksum mismatch: {filename}")
     for needed in ["LICENSE", "THIRD_PARTY_NOTICES.md", "include/ladio/ladio.h", "docs/specification/ENGINE.md"]:
         if not (root / needed).is_file():
             raise ValueError(f"Missing release file: {needed}")

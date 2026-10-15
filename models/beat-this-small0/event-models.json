@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "frontend": "magnitude-slaney-A-dB-24k-v1",
+  "models": {
+    "InstrumentActivityModel.onnx": {
+      "bytes": 8681395,
+      "sha256": "feb96f0fb9888b405b5448712b7b60ba2bb6b8469f1bd9295541a55917405820",
+      "fnv1a64": "5282abbcfc315d23"
+    },
+    "StructuralFeaturesModel.onnx": {
+      "bytes": 8329121,
+      "sha256": "c272d7ea0dd7f4cefa69414fd64c592cf8fd8f2b6ea5e41a1071e80171030d5f",
+      "fnv1a64": "07f699279dce6672"
+    }
+  },
+  "threads": 2,
+  "transcription": false,
+  "separation": false,
+  "provenance": "User-provided fine-tuned LADIO models; training lineage reported by the project author and not independently audited",
+  "frontend_implementation": "Independent FFT, Slaney mel and A-weighting implementation"
+}
