@@ -2,6 +2,7 @@
 #include "model_bundle.hpp"
 #include "event_features.hpp"
 #include "checksum.hpp"
+#include "../model_events.hpp"
 #include <mutex>
 namespace ladio::mobile {
 namespace {
@@ -152,37 +153,8 @@ void Models::musicalEvents(Json&analysis,const PCMFile&pcm,const std::function<b
         run("StructuralFeaturesModel.onnx",structure,256,{"phrases","segments","sections"},"structure");
         check(cancel);writeJson(cached,observations);
     }
-    const double offset=observations.at("frame_center_seconds"),step=observations.at("step_seconds");
-    auto sample=[&](const char*group,const char*field,double time){const auto&v=observations.at(group).at(field);int i=std::clamp(int(std::llround((time-offset)/step)),0,int(v.size())-1);return v.at(i).get<double>();};
-    for(auto&c:analysis["curves"]){double t=c.at("time");for(auto name:{"vocals","drums","bass","others"})c[std::string(name)+"_activity"]=sample("activity",name,t);c["vocal"]=sample("activity","vocals",t);for(auto name:{"phrases","segments","sections"}){double peak=0;for(double dt:{-.10,-.05,0.,.05,.10})peak=std::max(peak,sample("structure",name,t+dt));c[std::string(name)+"_boundary"]=peak;}}
-    Json intervals=Json::array();const auto&v=observations["activity"]["vocals"];int start=-1,last=-1;double confidence=0;
-    for(int i=0;i<=int(v.size());i++){
-        double x=i<int(v.size())?v[i].get<double>():0.;
-        if(x>=.5&&start<0){start=i;confidence=x;}
-        if(start>=0){confidence=std::max(confidence,x);if(x>=.28)last=i;
-            if(i==int(v.size())||i-last>=4){double first=std::max(0.,start*step+offset-.12),end=std::min(analysis.at("duration").get<double>(),(last+1)*step+offset+.15);if(end-first>.16)intervals.push_back({{"start",first},{"end",end},{"confidence",std::min(.95,confidence)},{"method","supplied activity model; no text recognition"}});start=last=-1;}
-        }
-    }
-    // Presence is not phrase segmentation: sustained singing may remain active
-    // across a whole verse. Split protection only at a strong musical boundary
-    // on the measured grid, with extra support from an activity valley unless
-    // boundary confidence is very high. These remain estimates, never words.
-    Json phrases=Json::array();double bpm=analysis.value("tempo",120.),minPhrase=std::max(1.5,120/bpm);
-    for(const auto&range:intervals){
-        double begin=range.at("start"),finish=range.at("end");
-        for(double down:analysis.value("downbeats",std::vector<double>{})){
-            if(down-begin<minPhrase||finish-down<minPhrase)continue;
-            double boundary=0;for(double dt:{-.15,-.10,-.05,0.,.05,.10,.15})boundary=std::max(boundary,sample("structure","phrases",down+dt));
-            double centre=sample("activity","vocals",down),surround=.5*(sample("activity","vocals",down-.4)+sample("activity","vocals",down+.4));
-            if(boundary<.65||(boundary<.86&&centre>surround*.96))continue;
-            phrases.push_back({{"start",begin},{"end",down-.08},{"confidence",range.at("confidence")},{"boundary_confidence",boundary},{"method","activity plus measured musical phrase; words unverified"}});begin=down+.08;
-        }
-        if(finish>begin)phrases.push_back({{"start",begin},{"end",finish},{"confidence",range.at("confidence")},{"method","activity range end"}});
-    }
-    analysis["vocal_intervals"]=intervals;analysis["protected_vocal_phrases"]=phrases;analysis["vocal_phrases"]=phrases;
-    analysis["vocal_boundary_version"]="activity-and-musical-phrase-v1";
-    analysis["musical_event_models"]={{"enabled",true},{"cache_hit",hit},{"frontend",EventFeatures::version},{"identity",identity},{"separation",false},{"transcription",false},{"provenance",spec.value("provenance",std::string("supplied model bundle"))},{"boundaries","activity ranges, not recognized words"}};
-    analysis["model_observations"]=std::move(observations);
+    ladio::applyModelEvents(analysis,std::move(observations),hit,
+        spec.value("provenance",std::string("supplied model bundle")));
 }
 std::array<std::vector<float>,4> Models::separate(const PCMFile&,Frame,Frame,const std::function<bool()>&){
     throw std::runtime_error("No separator is bundled; provide prepared role windows through the scene contract");

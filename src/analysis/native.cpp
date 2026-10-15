@@ -1,6 +1,7 @@
 #include "types.hpp"
 #include "ladio/ladio.h"
 #include "structure.hpp"
+#include "model_events.hpp"
 #include <complex>
 #include <functional>
 namespace ladio {
@@ -21,3 +22,13 @@ Json nativeAnalyzeCancellable(const float*x,Frame frames,int sr,const char*id,co
 Json nativeAnalyze(const float*x,Frame frames,int sr,const char*id){return nativeAnalyzeCancellable(x,frames,sr,id,{});}
 }
 extern "C" int ladio_analyze_pcm(const float*x,int64_t frames,int32_t sr,const char*id,const char*out){try{ladio::writeJson(out,ladio::nativeAnalyze(x,frames,sr,id));return 1;}catch(...){return 0;}}
+
+extern "C" int ladio_apply_model_events(const char*track,const char*events,const char*out){
+    try{
+        if(!track||!events||!out)return 0;
+        auto analysis=ladio::readJson(track);
+        ladio::applyModelEvents(analysis,ladio::readJson(events));
+        ladio::analyzeStructure(analysis);
+        ladio::writeJson(out,analysis);return 1;
+    }catch(...){return 0;}
+}

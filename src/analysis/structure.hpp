@@ -136,7 +136,12 @@ inline void analyzeStructure(Json &t) {
             {"energy_fall",fall},{"structure_confidence",dc}};
         // Keep measured transient, harmony and stem descriptors at this downbeat.
         for(const auto&o:old)if(abs(o.value("time",-99.)-down[i])<.08){
-            for(auto key:{"key","rhythm","timbre","attack_seconds","attack_confidence","drum_jump","bass_jump","vocal","vocal_before","vocal_after"})if(o.contains(key))c[key]=o.at(key);
+            for(auto key:{"key","rhythm","timbre","attack_seconds","attack_confidence","drum_jump","bass_jump","vocal","vocal_before","vocal_after"})if(o.contains(key)){
+                // Rebuilding cues after model inference must not restore coarse
+                // vocal estimates from the pre-model analysis.
+                if(modelAssisted&&std::string_view(key).starts_with("vocal"))continue;
+                c[key]=o.at(key);
+            }
             if(o.value("kind","")=="impact"&&boundary){c["kind"]="impact";c["energy_jump"]=std::max(c["energy_jump"].get<double>(),o.value("energy_jump",0.));}
             break;
         }

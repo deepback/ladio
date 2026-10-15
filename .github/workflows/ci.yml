@@ -15,6 +15,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/verify_release.py
+      - if: runner.os == 'macOS'
+        run: swift test --package-path bindings/swift
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
       - run: cmake --build build --config Release --parallel 2
       - run: ctest --test-dir build -C Release --output-on-failure

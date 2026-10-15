@@ -23,6 +23,11 @@ for entry in ["include", "models", "licenses"]:
 for entry in ["LICENSE", "THIRD_PARTY_NOTICES.md"]:
     shutil.copy2(ROOT / entry, folder / entry)
 shutil.copy2(ROOT / "examples" / ("android" if args.platform.startswith("android") else "swift") / "README.md", folder / "INTEGRATION.md")
+if args.platform == "ios-arm64":
+    shutil.copytree(ROOT / "bindings/swift", folder / "bindings/swift", dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns(".build", ".swiftpm"))
+    shutil.copytree(ROOT / "examples/swift", folder / "examples/swift", dirs_exist_ok=True)
+    shutil.copy2(ROOT / "docs/COREML_IOS_RU.md", folder / "COREML_IOS_RU.md")
 (folder / "README.txt").write_text("LADIO 1.0.0 core SDK. Native library, headers, licensed Beat This model and notices.\nNo ONNX Runtime or analyzer binary included. Build the optional analyzer from source.\nKeep all third-party notices. Android hosts supply their matching NDK C++ runtime.\nSee https://github.com/deepback/ladio for source, build settings and integration.\n")
 archive = args.output / (name + ".tar.gz")
 with tarfile.open(archive, "w:gz") as output:

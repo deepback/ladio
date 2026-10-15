@@ -56,6 +56,13 @@ int ladio_render_session(const char *session_json, const char *wav_path, const c
 /* Coarse native analysis. Optional ladio_analysis adds learned beat/downbeat analysis. */
 int ladio_analyze_pcm(const float *interleaved_stereo, int64_t frames, int32_t sample_rate,
                   const char *asset_id, const char *output_json);
+/* Merge full-track Core ML/other model observations, then recompute musical
+   structure with the same postprocessing as the ONNX analyzer. Files contain
+   track JSON and 50 ms activity/structure probabilities bound to source_hash.
+   Returns 0 on invalid identity/clock/probabilities; does not write on failure.
+   Background worker only; preserves the measured beat grid and DSP harmony. */
+int ladio_apply_model_events(const char *track_json, const char *observations_json,
+                             const char *output_json);
 #ifdef __cplusplus
 }
 #endif
