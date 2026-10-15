@@ -1,8 +1,8 @@
-# Embedding LADIO
+# Встраивание LADIO
 
-## Build products
+## Компоненты сборки
 
-`Ladio::Core` contains the planner, compiler, DSP, player and native analysis entry point. It has no ONNX dependency. `Ladio::Analysis` is optional and adds Beat This analysis and native preparation through a C API. The host supplies ONNX Runtime for its target architecture. SoXR is built as a separate shared library for this optional path.
+`Ladio::Core` содержит планировщик, компилятор, DSP, плеер и нативный анализ. ONNX-зависимости нет. Дополнительный `Ladio::Analysis` добавляет Beat This и подготовку через C API. ONNX Runtime предоставляет приложение под свою архитектуру; SoXR для этого пути собирается отдельной разделяемой библиотекой.
 
 ```sh
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/build/install"
@@ -10,11 +10,11 @@ cmake --build build --config Release --parallel 2
 cmake --install build --config Release
 ```
 
-Consumers use `find_package(Ladio 1 CONFIG REQUIRED)` with `CMAKE_PREFIX_PATH` pointing at that prefix. Link `Ladio::Core`; if the package was built with ONNX, `Ladio::Analysis` is also exported. Shared-library deployment must include the platform-specific runtime libraries and preserve dependency notices. Static core builds are supported with `BUILD_SHARED_LIBS=OFF`.
+Внешний проект вызывает `find_package(Ladio 1 CONFIG REQUIRED)`, задав `CMAKE_PREFIX_PATH` на префикс установки, и подключает `Ladio::Core`. При сборке с ONNX экспортируется также `Ladio::Analysis`. Для динамической поставки нужны платформенные библиотеки и уведомления о зависимостях. Статическое ядро собирается с `BUILD_SHARED_LIBS=OFF`.
 
-## Source representation
+## Представление аудио
 
-The host decodes audio to flat interleaved stereo float32 little-endian PCM. Use 44,100 Hz for the optional analyzer; its supported duration is 20 seconds–6 minutes. The native player emits noninterleaved stereo floats. Audio resampling/device formats are host responsibilities.
+Приложение декодирует источник в чередующийся стерео float32 little-endian PCM. Для дополнительного анализатора нужны 44 100 Гц и длительность 20 секунд–6 минут. Плеер выдаёт раздельные каналы float. Пересэмплирование и формат устройства — ответственность приложения.
 
 ```json
 {
@@ -28,32 +28,31 @@ The host decodes audio to flat interleaved stereo float32 little-endian PCM. Use
 }
 ```
 
-This fragment documents required identity/audio fields; empty annotations are not a usable DJ grid. See `examples/generate_fixture.py` for a complete original annotated example. Relative PCM paths in a library resolve against the library directory. Recompute identity after changing audio.
+Здесь показаны поля идентичности и аудио; пустые аннотации не образуют пригодную DJ-сетку. Полный синтетический пример с разметкой — `examples/generate_fixture.py`. Относительные PCM-пути разрешаются от каталога библиотеки. После изменения аудио обновите его идентичность.
 
-For learned analysis, invoke `ladio_analyzer_analyze` for each PCM and combine its track JSON outputs into `{"schema_version":1,"tracks":[...]}`. The CLI's `analyze` command uses the PCM filename stem as ID; filenames must be unique within a queue. With the C API, supply your library's stable unique ID explicitly. Store absolute PCM paths or make them correctly relative to the library you write.
+Для нейросетевого анализа вызовите `ladio_analyzer_analyze` для каждого PCM и объедините JSON треков в `{"schema_version":1,"tracks":[...]}`. Команда CLI `analyze` берёт ID из имени PCM без расширения, поэтому имена внутри очереди должны быть уникальны. В C API передавайте устойчивый уникальный ID явно. PCM-пути должны быть абсолютными либо корректно относительными к записанной библиотеке.
 
-## Preparation and playback
+## Подготовка и плеер
 
-Call `ladio_prepare_library(library, output, "dj", seed)` off the UI/audio threads, or use the asynchronous `LadioPreparation` handle. Read progress/state, copy any error string before destroying the handle, and destroy only on a thread allowed to join the worker. Preparation creates `session.json` plus its generated resources.
+Вызовите `ladio_prepare_library(library, output, "dj", seed)` вне UI/аудиопотоков либо используйте асинхронный `LadioPreparation`. Считывайте прогресс и состояние; строку ошибки скопируйте до уничтожения объекта. Уничтожение ожидает рабочий поток. Результат — `session.json` и его ресурсы.
 
-Open that session with `ladio_player_create`, then call `play`. In the device callback call only `pull` with preallocated planar buffers. Zero any frames not returned; never decode, plan, seek, destroy or run inference in that callback. Poll `LadioSnapshot` for UI state, source positions, transition progress, peaks and underruns.
+Откройте сессию через `ladio_player_create`, затем вызовите `play`. Колбэк устройства вызывает только `pull` с заранее выделенными раздельными буферами и заполняет нулями невыданные кадры. Декодирование, планирование, перемотка, уничтожение и инференс в аудиоколбэке недопустимы. Для UI читайте `LadioSnapshot`: позиции источников, прогресс перехода, пики и недоподачу буфера.
 
-Only one producer may call control functions at a time. The application owns audio focus, interruptions, background/foreground lifecycle and device route changes. A completed offline render does not implement those mobile responsibilities.
+Управляющие функции одновременно вызывает только один производитель. Приложение отвечает за audio focus, прерывания, фон/передний план и смену маршрута. Успешный офлайн-рендер не реализует эти мобильные обязанности.
 
-## Examples
+## Примеры
 
-- [`examples/c`](../examples/c): installed-package consumer and version/API smoke check.
-- [`bindings/python/ladio.py`](../bindings/python/ladio.py): standard-library ctypes wrapper; no Python inference dependency.
-- [`examples/python`](../examples/python): prepare and render with that wrapper.
-- [`examples/swift`](../examples/swift): C module import and ownership skeleton for an Apple host.
-- [`examples/android`](../examples/android): NDK build/link notes and JNI control bridge skeleton.
+- [C](../examples/c): потребитель установленного пакета и проверка версии/API.
+- [Python](../examples/python): подготовка и рендер через [ctypes-обёртку](../bindings/python/ladio.py), без Python-инференса.
+- [Swift](../examples/swift): импорт C-модуля, владение объектом и управление.
+- [Android NDK](../examples/android): сборка, линковка и каркас JNI-моста.
 
-macOS, Linux and Windows are native build targets. iOS and Android use the same core through their native toolchains, but this release does not include a complete mobile player, signed app or measured phone performance report. WebAssembly is outside this release's verified target set.
+macOS, Linux и Windows — целевые нативные платформы. iOS и Android используют то же ядро через свой инструментарий. Готовый мобильный плеер, подписанное приложение и измеренный профиль телефона в SDK не входят. WebAssembly в проверенный набор целей не включён.
 
-## ONNX analyzer deployment
+## Поставка ONNX-анализатора
 
-The model root can be `models/` or `models/beat-this-small0/`. Validate the bundle with `scripts/verify_release.py` before distribution. Never mix its frontend table or metadata with a different checkpoint.
+Корень модели может быть `models/` или `models/beat-this-small0/`. Перед распространением запустите `scripts/verify_release.py`. Нельзя смешивать фронтенд и метаданные с другим checkpoint.
 
-The analyzer runs one operation process-wide. Set a progress callback before starting. For cancellation, call `ladio_analyzer_cancel` from another thread, wait for the operation to return, then destroy. The callback is delivered on the analysis worker and must marshal to your UI thread.
+Анализатор исполняет одну операцию на процесс. Callback прогресса установите до запуска. Для отмены вызовите `ladio_analyzer_cancel` из другого потока, дождитесь возврата операции, затем уничтожайте объект. Callback приходит в потоке анализа и должен передавать обновления в UI-поток.
 
-Ship ONNX Runtime and its notices yourself. Ship the optional SoXR shared library with its notices and corresponding source/relinking arrangements required by LGPL for your distribution. `Ladio::Core` itself remains MIT-only apart from its MIT vendored components.
+ONNX Runtime и его уведомления поставляет приложение. Для SoXR сохраните уведомления, соответствующий исходный код и необходимые условия заменяемости/перелинковки LGPL. Ядро `Ladio::Core` использует собственный MIT-код и включённые MIT-компоненты.

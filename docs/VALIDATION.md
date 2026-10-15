@@ -1,26 +1,26 @@
-# Release validation — 1.0.0
+# Проверки релиза 1.0.0
 
-Evidence recorded on 2026-10-15. [Machine-readable record](validation.json). The [CI workflow](https://github.com/deepback/ladio/actions/workflows/ci.yml) is the authoritative public record for each pushed revision.
+Запись от 15 октября 2026 года. [Машинные результаты](validation.json). [CI](https://github.com/deepback/ladio/actions/workflows/ci.yml) хранит результаты для опубликованных ревизий; локальные и удалённые проверки различаются.
 
-| Check | Evidence | Scope |
+| Проверка | Результат | Что подтверждает |
 |---|---|---|
-| Portable core CTest | 7/7 passing locally | Core, scene, independent DJ, harmony, measured grid, C ABI, model integrity |
-| Optional ONNX build | Successful on macOS arm64 | Public C analyzer API and native CLI linked to external ONNX Runtime |
-| Android cross-compilation | Successful, NDK 27.3, API 26, arm64-v8a | Core library; no phone runtime claim |
-| iOS cross-compilation | Successful, iOS 27 SDK, arm64, deployment target 15.0 | Static core; no device run |
-| Installed C consumer | Prints `LADIO 1.0.0 / C ABI 1` | Separate `find_package(Ladio)` projects with both shared and static installed cores |
-| Installed ONNX analyzer | Real-audio entry analysis completed with external runtime | Installed executable and its library dependencies |
-| Python facade | Version and native error propagation checked | ctypes boundary; no real-time Python audio promise |
-| Swift example | Type-checks with installed C module | C import/ownership skeleton; no device audio claim |
-| Public model bundle | 1 ONNX model, 4 hashed execution assets | Byte sizes, SHA-256, registration and relative-path integrity |
-| Real-audio analysis | Entry scope completed; 240 beats, 60 downbeats, 7 cues | Local 248.04 s input; private audio and full analysis are not distributed |
-| Original synthetic mix | 197.47 s, zero nonfinite samples | Known annotations, planner → compiler → full WAV render |
+| CTest ядра | 7 из 7 локально | Ядро, сцены, независимые DJ-источники, гармония, измеренная сетка, C ABI, целостность модели |
+| Дополнительная ONNX-сборка | Успешно на macOS arm64 | C API анализатора и CLI с внешним ONNX Runtime |
+| Android | Кросс-компиляция NDK 27.3, API 26, arm64-v8a | Сборка ядра; запуск на телефоне этим не подтверждается |
+| iOS | Кросс-компиляция iOS 27 SDK, arm64, минимальная версия 15.0 | Статическое ядро; без запуска на устройстве |
+| Внешний C-проект | Выводит `LADIO 1.0.0 / C ABI 1` | Отдельные `find_package(Ladio)`-проекты с установленными динамическим и статическим ядрами |
+| Установленный анализатор | Завершён анализ области входа реального аудио | Установленный CLI и его зависимости |
+| Python | Проверены версия и передача нативной ошибки | Граница ctypes; не обещание Python-аудиопотока реального времени |
+| Swift | Пройдена проверка типов | Импорт C и каркас владения; без звука на устройстве |
+| Комплект модели | 1 ONNX, 4 проверяемых ресурса | Размеры, SHA-256, регистрация и относительные пути |
+| Реальное аудио | Область `entry`: 240 долей, 60 сильных долей, 7 точек | Локальный вход 248,04 с; приватное аудио и полная разметка не распространяются |
+| Синтетический микс | 197,47 с, нет нечисловых/бесконечных отсчётов | Известная разметка → планировщик → компилятор → полный WAV |
 
-The synthetic render took approximately 1.65 seconds on this development host, excluding fixture generation, analysis and scene preparation. This is a single local observation, not a mobile performance benchmark. Peak was approximately −9.93 dBFS. Detailed render measurements are in the JSON record.
+Синтетический рендер занял около 1,65 с на машине разработки, без генерации материала, анализа и подготовки сцены. Это одно локальное измерение, не мобильный бенчмарк. Пик — примерно −9,93 dBFS. Подробности сохранены в JSON.
 
-A repetitive synthetic signal was rejected for ambiguous measured bar support even though its beat pulse was detected. That result is retained as a limit of the evidence; the demo supplies known annotations rather than claiming that generated material establishes neural downbeat accuracy.
+Один повторяющийся синтетический сигнал был отклонён из-за неоднозначной поддержки тактов, хотя пульс обнаружился. Этот результат сохранён как ограничение: демонстрационный материал использует известную разметку и не доказывает точность нейросети на реальной музыке.
 
-## Reproduce
+## Повторить
 
 ```sh
 python3 scripts/verify_release.py
@@ -32,8 +32,14 @@ build/ladio prepare build/demo/library.json build/demo/mix dj 42
 build/ladio render build/demo/mix/session.json build/demo/mix.wav build/demo/report.json
 ```
 
-Model integrity and a clean static-core build also passed from a cloned second source directory with spaces in its name. Installed-package consumers must not include headers from the original AutoMix project. Public release archives contain source/model assets; generated PCM, commercial audio, temporary SDK binaries and device logs are excluded.
+Целостность модели и чистая статическая сборка проверялись также после переноса в каталог с пробелами. Внешние потребители не должны включать заголовки исходного AutoMix. Публичные архивы исключают сгенерированный PCM, коммерческое аудио, временные SDK-бинарники и журналы устройств.
 
-## Remaining acceptance
+## Что ещё не подтверждено
 
-The Android core build is not an APK or Pixel playback test. iOS physical playback, mobile background lifecycle, sustained thermal/battery cost and deadline guarantees are not established by this packaging release. Listening quality on arbitrary songs, learned phrase boundaries and equivalence to Apple's undisclosed internal planner remain unproven. GitHub-hosted macOS/Linux/Windows jobs could not start because GitHub reported an account billing lock. The workflow is included, but those hosted results are not passing-build evidence.
+Android-сборка не является APK или проверкой на Pixel. Физическое воспроизведение iOS, фоновые состояния, длительный нагрев, батарея и сроки подготовки требуют проверки на устройствах. Прослушивания на произвольных песнях, обученные границы фраз и совпадение с закрытым планировщиком Apple не установлены.
+
+GitHub-hosted задания macOS/Linux/Windows не стартовали из-за ограничения биллинга аккаунта GitHub. Workflow включён, но успешными удалёнными сборками эти задания не считаются.
+
+## Оформление и анимации
+
+Обновление документации не меняет DSP и модель. Проверка ресурсов и локальных ссылок: `python3 scripts/verify_docs.py`. Типы проекта иллюстраций: `cd visuals && npm run lint`. На сайте отдельно проверяются мобильная ширина, выбор трёх сцен, пауза и корректное пустое состояние аудиопримеров. Файлы MP4/GIF содержат схемы, а не измеренную аудиоволну.

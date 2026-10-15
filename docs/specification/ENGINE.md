@@ -1,87 +1,87 @@
-# LADIO engine specification
+# Спецификация движка LADIO
 
-**Release:** 1.0.0 · **Language:** C++20 · **Public boundary:** C ABI v1 · **License:** MIT core
+Версия SDK 1.0.0. Язык C++20. Публичная бинарная граница — C ABI v1. Лицензия оригинального ядра — MIT.
 
-## 1. Purpose and scope
+## Назначение и границы
 
-LADIO transforms annotated musical sources into a compiled transition and a playable session. The host provides decoded audio, storage and the audio device. The engine owns candidate selection, source/output maps, DSP automation, prepared PCM and playback state.
+LADIO превращает размеченные музыкальные источники в скомпилированный переход и воспроизводимую сессию. Приложение предоставляет декодированное аудио, хранилище и аудиоустройство. Движок отвечает за выбор кандидатов, карты исходного и выходного времени, автоматизацию DSP, подготовку PCM и состояние плеера.
 
-The distribution includes a portable core and an optional ONNX analyzer. It deliberately excludes the desktop app, Lane modification, commercial audio, private framework research and non-redistributable model exports. Existing internal compiler/graph revision strings are retained as cache compatibility identifiers; they are not the SDK's semantic version.
+Поставляются переносимое ядро и дополнительный ONNX-анализатор. Настольное приложение, модификация Lane, коммерческое аудио и приватные исследовательские ресурсы не включены. Внутренние строки ревизий графа и компилятора сохранены как идентификаторы совместимости кэша; это не семантическая версия SDK.
 
-![Architecture](../assets/architecture.svg)
+![Этапы обработки](../assets/architecture.svg)
 
-## 2. Modules and contracts
+## Модули и контракты
 
-| Module | Input | Output | Responsibility |
-|---|---|---|---|
-| `src/analysis/native.cpp`, `structure.hpp` | PCM / track JSON | Coarse analysis / structural descriptors | Portable descriptors; native A1 fallback is not a learned beat tracker |
-| `src/analysis/onnx` | 44.1 kHz stereo PCM, model root, analysis scope | Track JSON and reusable analysis data | Beat This inference, native descriptor integration, scoped preparation |
-| `src/planner` | Tracks, measured anchors, policy, seed | Plan plus scene JSON | Candidate search, material suitability, timing, cost and variation |
-| `src/core/scene.*` | Scene JSON | Validated voice, effect and timing graph | Reject inconsistent or unsupported execution plans |
-| `src/core/compiler.cpp` | Sources and plan | Prepared source windows and manifests | Time-stretch, source mapping, compiled resources |
-| `src/core/mixer.cpp` | Compiled scene | Planar stereo blocks | Dry paths, captures, filtering, modulation and effect returns |
-| `src/core/player.cpp` | Session and controls | PCM plus snapshot | Worker/read-ahead, seek generations and bounded callback consumption |
+| Модуль | Вход | Выход и ответственность |
+|---|---|---|
+| `src/analysis/native.cpp`, `structure.hpp` | PCM или JSON трека | Приближённый анализ и структурные признаки. Нативный резервный путь A1 не является обученным трекером ритма |
+| `src/analysis/onnx` | Стерео PCM 44,1 кГц, корень модели, область анализа | JSON трека, переиспользуемые данные; Beat This и нативные признаки |
+| `src/planner` | Треки, измеренные опорные точки, политика, seed | План и JSON сцены; материал, тайминг, стоимость и разнообразие |
+| `src/core/scene.*` | JSON сцены | Проверенный граф голосов, эффектов и времени; отклонение несогласованных планов |
+| `src/core/compiler.cpp` | Источники и план | Подготовленные окна, карты времени, манифесты и растяжение |
+| `src/core/mixer.cpp` | Скомпилированная сцена | Раздельные стереоблоки: сухие пути, захваты, фильтры, модуляция, возвраты |
+| `src/core/player.cpp` | Сессия и команды | PCM и снимок состояния; опережающая подготовка, поколения перемотки, ограниченный аудиоколбэк |
 
-C headers are authoritative for binary interfaces. Internal C++ headers and scene JSON are inspectable implementation formats, not a promise of C++ ABI stability.
+Публичные C-заголовки определяют бинарный контракт. Внутренние C++-заголовки и JSON сцены доступны для изучения, но стабильность C++ ABI не обещается.
 
-## 3. Musical evidence
+## Музыкальные данные
 
-Tracks carry an identity/revision, content hash, PCM path, frame count, sample rate, loudness estimate, tempo hypotheses, beats, downbeats and cue candidates. Cue records can include bar position, boundary strength, entry/exit suitability, local chroma, rhythm/timbre descriptors and confidence. Optional protected vocal intervals and supplied stem windows extend that evidence.
+Трек содержит идентификатор и ревизию, хеш аудио, путь PCM, количество кадров, частоту, оценку громкости, гипотезы темпа, доли, сильные доли и точки-кандидаты. У точек могут быть положение в такте, сила границы, пригодность входа/выхода, локальная хрома, ритмические/тембровые признаки и уверенность. Защищённые вокальные интервалы и предоставленные окна стемов расширяют данные.
 
-The optional analyzer derives beat/downbeat logits with Beat This `small0`. Native code evaluates quarter-pulse hypotheses, local consistency and bar support instead of treating one global BPM as sufficient evidence. The lightweight native-only analysis function is a coarse fallback; its regular grid is not a measured neural grid and should not be presented as one.
+Beat This `small0` выдаёт логиты долей и сильных долей. Нативная обработка оценивает гипотезы четвертного пульса, локальную согласованность и поддержку тактов. Одного глобального BPM недостаточно. Регулярная сетка лёгкого нативного анализа — приближение, а не измеренная нейросетевая сетка.
 
-Structural novelty and vocal-related proxies are fallible. Without an explicit activity model, stems or trusted annotations, the engine cannot reliably identify the end of every sung word. Local stereo harmony is the public default; role-specific harmony is available only when corresponding resource evidence exists.
+Структурная новизна и косвенные вокальные признаки могут ошибаться. Без отдельной модели активности, стемов или доверенной разметки нельзя гарантировать окончание каждого слова. По умолчанию гармония оценивается по локальному стерео; оценка отдельных ролей требует соответствующих ресурсов.
 
-## 4. Search and selection
+## Поиск и выбор
 
-The planner first evaluates useful arrival/entry material in B and a viable later exit in A. It prefers B's earlier portion and A's later portion, while requiring enough source continuation to finish the scene. Current direct-scene search bounds include an incoming anchor below 46% of duration and an outgoing cue beyond 55%, with additional runway constraints; these are heuristics, not universal musical truths.
+Сначала оцениваются полезный вход/раскрытие B и жизнеспособный поздний выход A. Предпочтение отдаётся ранней части B и поздней части A с достаточным продолжением для завершения сцены. В текущем прямом поиске опорная точка B находится до 46% длительности, а точка выхода A — после 55%; дополнительно проверяется запас материала. Это эвристики, а не универсальные музыкальные границы.
 
-Candidate scenes are evaluated against measured synchronization, harmonic compatibility, rhythm similarity, energy continuity, phrase protection, available introduction/runway, capture/loop quality and resource cost. Variation influences valid choices rather than overriding hard correctness constraints. A preferred style can constrain selection, but an unsafe requested style may be rejected. Plans retain decision and veto details so that fallback behavior is inspectable.
+Кандидаты оцениваются по измеренной синхронизации, гармонии, ритмическому сходству, энергии, защите фраз, запасу вступления, качеству захвата/лупа и стоимости ресурсов. Разнообразие влияет на допустимые варианты, не отменяя жёсткие ограничения. Предпочтительный стиль может ограничить поиск, но небезопасный запрос отклоняется. Причины выбора, отклонения и упрощения остаются в плане.
 
-Queue planning must preserve playable source between an incoming transition's end and that track's later outgoing transition. Reordering a queue changes these constraints. The SDK does not promise that every arbitrary queue has a valid elaborate DJ scene.
+В очереди после входящего перехода должно остаться воспроизводимое продолжение до следующего выхода этого трека. Перестановка песен меняет ограничения. Сложная DJ-сцена существует не для каждой произвольной очереди.
 
-## 5. Independent musical events
+## Независимые события
 
-A scene distinguishes first audible B, hybrid/joint play, foundation exchange, outgoing phrase completion/release, incoming arrival, B lead, last audible A and recovery. These events can coincide but are not implicitly one timestamp.
+Сцена различает первое слышимое B, совместную игру, передачу опоры, завершение фразы/освобождение A, раскрытие B, лидерство B, последний слышимый A и восстановление обычного воспроизведения. События могут совпасть, но не являются одной общей отметкой.
 
-Voices distinguish the two main readers and bounded independent captures/teasers. A teaser does not advance the main incoming playhead. Captured material must remain complete under changed tempo; its output duration follows its time map. An outgoing tail can continue after dry A releases, while its lows and rhythm are removed before an incompatible new pulse.
+Есть основные читатели A/B и ограниченные независимые захваты/тизеры. Тизер не двигает основной курсор B. Клип должен остаться целым после изменения темпа; его выходная длительность определяется временной картой. Хвост A может звучать после ухода сухого сигнала, но перед несовместимым пульсом его низ и выраженный старый ритм освобождают музыку.
 
-![Scene](../assets/scene-score.svg)
+![Партитура сцены](../assets/scene-score.svg)
 
-## 6. Tempo and phase
+## Темп и фаза
 
-Each active source uses a monotonic source/output map tied to the scene's quarter-note clock. Compatible pairs can begin at A's pulse and move smoothly toward B's pulse. B can enter already mapped to that shared pulse, then reach a rate of 1 at arrival. Captures and loop stages use the same transport decisions.
+Каждый активный источник использует монотонную карту исходного/выходного времени, связанную с четвертным пульсом сцены. Совместимая пара может начать в темпе A и плавно прийти к темпу B. Входящий B уже следует общему пульсу и к раскрытию получает скорость 1. Захваты и стадии лупа участвуют в согласованном транспорте.
 
-Half/double-time is a musical interpretation, not permission to play the recording at twice its speed. The current direct DJ implementation allows a maximum recording-rate deviation up to 18%; the general policy structure's default is 6%. Inspect the chosen plan rather than assuming a fixed 6% bound for every DJ scene. If a continuous match exceeds the direct budget or contradicts measured phase, a bounded pulse bridge is considered.
+Половинный/двойной пульс — музыкальная интерпретация, а не разрешение включить запись вдвое быстрее. Текущая прямая DJ-реализация допускает отклонение скорости записи до 18%; общая структура политики по умолчанию задаёт 6%. Проверять нужно конкретный план. При выходе за бюджет или противоречии измеренной фазе рассматривается ограниченный мост смены пульса.
 
-Phase correction must bind to measured bars, not invented half-bar accents. Stretch latency and source lookahead belong to compilation. At the end of recovery, native B must continue at the same source position, level and speed as the scene's prepared B.
+Фазовая коррекция привязана к измеренным тактам. Задержка растяжителя и чтение вперёд учитываются при компиляции. После восстановления оригинальный B должен продолжить с той же позиции, громкостью и скоростью, что подготовленный B в сцене.
 
-![Tempo](../assets/tempo-map.svg)
+![Согласованный темп](../assets/tempo-map.svg)
 
-## 7. Holds, repeats and FX
+## Лупы, повторы и эффекты
 
-A useful hold loop needs measured bar boundaries, stable material, low seam discontinuity and a clear exit. Loop extension is conditional on B having useful development/runway. Repeat compression is a separate final-stage gesture; it does not justify shredding the whole bass line throughout a scene. Source-loop stages and independent clips are represented explicitly.
+Полезному удерживающему лупу нужны измеренные границы тактов, устойчивый материал, малый скачок на шве и явный выход. Продление уместно, если B располагает развитием и запасом для входа. Дробление повтора — отдельный завершающий жест; оно не должно постоянно разрушать басовую партию. Стадии исходного лупа и независимые клипы представлены явно.
 
-The DSP has per-deck filters/EQ, flanging, rhythmic gating, tempo delay, room/reverb and routed sends/returns. Capture feed and return gain are distinct. Effect return can remain audible after dry release. Automation is represented by time-varying curves, not a single enabled flag. A scene must budget low-frequency overlap and preserve incoming attacks rather than masking errors with a limiter.
+DSP содержит фильтры/EQ по декам, фланжер, ритмический гейт, темповый дилей и реверберацию с отдельными посылами/возвратами. Подача материала и громкость возврата — разные параметры. Возврат может оставаться после ухода сухого A. Автоматизация задаётся кривыми во времени. Перекрытие низких частот и атака B должны контролироваться планом, а не маскироваться лимитером.
 
-The effects are LADIO's native implementations, not binaries or bit-exact replacements for Apple Audio Units. The [catalogue](TRANSITIONS.md) maps constructions to those processors.
+Это нативные реализации LADIO, а не Apple AU или их побитовые замены. [Каталог](TRANSITIONS.md) связывает сценарии с обработкой.
 
-## 8. Threading, playback and seek
+## Потоки, воспроизведение и перемотка
 
-One serialized control producer issues player commands. One audio consumer calls `ladio_player_pull` with separate preallocated left/right buffers. The pull path is bounded, lock-free and performs no ML, file I/O or heap allocation. Worker rendering and resource preparation happen off the audio thread. Read-ahead is specified in frames; the host must size its callback and buffer policy appropriately and zero any unfilled callback region.
+Один сериализованный управляющий поток выдаёт команды плееру. Один аудиопотребитель вызывает `ladio_player_pull` с заранее выделенными левым и правым буферами. Путь выдачи ограничен по работе, не использует блокировки, ML, файловый ввод-вывод и выделение памяти. Рендер и подготовка ресурсов идут в рабочих потоках. Опережающий буфер задаётся в кадрах; приложение выбирает политику и заполняет нулями недостающие кадры.
 
-Seek changes a playback generation. Prepared transitions remain part of the session's output timeline; seeking near or into them does not ask the planner to invent a new transition. DSP state is reconstructed where supported, including tested effect tails. Preparation destruction joins a worker and therefore belongs off the real-time audio callback and UI-sensitive paths.
+Перемотка меняет поколение воспроизведения. Подготовленные переходы уже принадлежат выходной временной линии; перемотка рядом или внутрь не требует изобретать новый переход. Состояние DSP восстанавливается там, где это поддерживается, включая проверенные хвосты эффектов. Уничтожение подготовки ожидает рабочий поток и не должно выполняться в аудиоколбэке или чувствительном UI-пути.
 
-The optional analyzer serializes operations process-wide, uses bounded inference threads and supports cancellation from another thread. The caller must wait for an operation to return before destroying its handle.
+Дополнительный анализатор сериализует операции на весь процесс, ограничивает потоки инференса и поддерживает отмену из другого потока. Перед уничтожением его объекта надо дождаться завершения операции.
 
-## 9. Storage and lifecycle
+## Хранение
 
-Uncompressed stereo float32 PCM at 44.1 kHz consumes 352,800 bytes/s, approximately 21.17 MB/minute. It is an execution format, not a compressed library format. Compiled resources should cover needed windows, and the application should retain original compressed assets separately.
+Стерео float32 PCM 44,1 кГц занимает 352 800 байт/с, примерно 21,17 МБ/мин. Это формат исполнения, не сжатая музыкальная библиотека. Подготовленные ресурсы должны покрывать нужные окна; исходные сжатые треки хранит приложение.
 
-Model files are relative to a model root and covered by a size/SHA-256 manifest. Analysis reuse must remain bound to audio content, frontend/model revision and scope. Output manifests are published through a temporary file and replacement. The library does not automatically garbage-collect a user's music or choose a global cache quota: the host should evict inactive generated resources with an LRU/size budget and avoid deleting live session assets.
+Пути моделей относительны корню комплекта, размеры и SHA-256 включены в манифест. Кэш анализа привязывается к содержимому аудио, версии модели/фронтенда и области анализа. Выходные манифесты публикуются через временный файл и замену. Общий лимит кэша и вытеснение неактивных ресурсов выбирает приложение; живые ресурсы сессии удалять нельзя.
 
-## 10. Acceptance and non-claims
+## Приёмка и ограничения
 
-A technically valid scene is not automatically a pleasing transition. Appropriate acceptance includes inspecting selected events, listening through preparation/arrival/recovery, comparing matched loudness, checking active effect buses and measuring preparation cost on the target device.
+Технически допустимая сцена ещё не гарантирует приятный переход. Нужно изучить выбранные события, прослушать подготовку/раскрытие/восстановление, согласовать громкость сравнения, проверить шины эффектов и измерить стоимость на устройстве.
 
-The repository's automated checks cover reproducible invariants and synthetic signal behavior. They do not establish perceptual equivalence to Apple Music, universal beat accuracy, a guaranteed 20-second phone preparation budget or zero battery impact. See [validation](../VALIDATION.md) for the release's actual evidence.
+Автоматические проверки доказывают инварианты и поведение синтетических сигналов. Они не устанавливают точное совпадение с Apple Music, универсальную точность ритма, срок подготовки 20 секунд на телефоне и отсутствие расхода батареи. [Запись проверок](../VALIDATION.md).

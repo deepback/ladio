@@ -32,7 +32,7 @@
     "channels": 2,
     "frames": 8708620,
     "nonfinite": 0,
-    "note": "Worker measurements; hardware callback only consumes bounded SPSC PCM",
+    "note": "Измерения рабочего потока; аппаратный колбэк получает только ограниченный SPSC PCM",
     "peak_dbfs": -9.93279286408961,
     "render_seconds": 1.646564958,
     "rms_dbfs": -24.73342253942446,
@@ -46,9 +46,9 @@
     "worker_worst_ms": 4.210208
   },
   "limitations": [
-    "No phone runtime/thermal acceptance",
-    "No listening study or Apple sonic parity claim",
-    "One repetitive synthetic signal was rejected by measured-grid validation; a render fixture with known annotations is used for renderer verification"
+    "Нет приёмки исполнения и нагрева на телефоне",
+    "Нет исследования прослушиваний и заявления о совпадении звучания с Apple",
+    "Повторяющийся синтетический сигнал отклонён проверкой тактов; для рендера используется материал с известной разметкой"
   ],
   "relocation": {
     "model_integrity": true,
@@ -57,7 +57,7 @@
   },
   "hosted_ci": {
     "executed": false,
-    "reason": "GitHub account billing lock; jobs did not start"
+    "reason": "Ограничение биллинга GitHub; задания не стартовали"
   },
   "ios_core": {
     "built": true,

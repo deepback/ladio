@@ -1,21 +1,25 @@
-# Reference and provenance notes
+# Источники и происхождение
 
-LADIO's product reference is the listening experience of dynamic transitions in Apple Music. Apple's public documentation describes AutoMix, beatmatching and time-stretching, but does not disclose a complete internal planner. These sources do not justify claims about private scene selection, stems or specific effects.
+Референс LADIO — слушательский опыт динамических переходов Apple Music. Публичные материалы Apple описывают AutoMix, beatmatching и time-stretching, но не раскрывают полный внутренний планировщик. По этим источникам нельзя утверждать конкретный способ выбора приватных сцен, выделения стемов и внутренних эффектов.
 
-1. **Apple Support — transition between songs.** Describes AutoMix and compatibility-dependent behavior. [Support article](https://support.apple.com/en-ie/105067).
-2. **Apple — macOS Tahoe feature overview.** Public description of AutoMix beatmatching and time-stretching. [Feature document](https://www.apple.com/nz/os/pdf/All_New_Features_macOS_Tahoe_Sept_2025_NZ_Final.pdf).
-3. **CPJKU — Beat This.** Upstream model, checkpoint family, frontend and MIT code/published-weight licensing. [Repository](https://github.com/CPJKU/beat_this), [license](https://github.com/CPJKU/beat_this/blob/main/LICENSE).
-4. **Signalsmith Audio — Signalsmith Stretch.** Upstream time-stretch implementation used by LADIO. [Repository and documentation](https://github.com/Signalsmith-Audio/signalsmith-stretch).
-5. **Microsoft — ONNX Runtime.** External native inference runtime. [Repository](https://github.com/microsoft/onnxruntime).
-6. **SoXR.** Optional resampler implementation and licensing. [Repository](https://github.com/chirlu/soxr).
-7. **nlohmann/json.** Included JSON implementation. [Repository](https://github.com/nlohmann/json).
+1. [Apple Support: переходы между песнями](https://support.apple.com/en-ie/105067). AutoMix и зависимость поведения от совместимости материала.
+2. [Apple: возможности macOS Tahoe](https://www.apple.com/nz/os/pdf/All_New_Features_macOS_Tahoe_Sept_2025_NZ_Final.pdf). Публичное описание синхронизации ритма и изменения длительности.
+3. [CPJKU: Beat This](https://github.com/CPJKU/beat_this), [MIT-лицензия](https://github.com/CPJKU/beat_this/blob/main/LICENSE). Семейство checkpoint, фронтенд, лицензия кода и опубликованных весов.
+4. [Signalsmith Audio: Signalsmith Stretch](https://github.com/Signalsmith-Audio/signalsmith-stretch). Используемое изменение длительности с сохранением высоты.
+5. [Microsoft: ONNX Runtime](https://github.com/microsoft/onnxruntime). Внешний нативный runtime инференса.
+6. [SoXR](https://github.com/chirlu/soxr). Дополнительный пересэмплер и его лицензирование.
+7. [nlohmann/json](https://github.com/nlohmann/json). Включённая реализация JSON.
 
-## What was extracted
+## Что входит в этот SDK
 
-This release packages LADIO's existing C++ planner/compiler/DSP and its portable ONNX integration into a new standalone SDK. It is not a transcription of Apple source code, an Apple AU redistribution or a bit-exact Apple port. Earlier private framework/model research is not part of this public repository. The historical term “clean-room” should not be taken as a formal independent-team provenance attestation.
+В самостоятельный репозиторий выделены существующие C++-планировщик, компилятор, DSP и переносимая ONNX-интеграция. Это не переписанный исходный код Apple, не распространение Apple AU и не побитовый порт. Приватное исследование фреймворков/моделей не является частью публичного репозитория. Историческое слово «clean-room» не следует понимать как подтверждение формального процесса независимых команд.
 
-The public checkpoint was trained by Beat This authors; the bounded attention ONNX export and native integration were prepared in the AutoMix project. Export metadata records numerical checks. DTTNet, SCNet and HTDemucs are not bundled or automatically run in this release. Describing them in earlier project discussions did not make them implemented dependencies.
+Публичный checkpoint обучен авторами Beat This. Экспорт ONNX с ограниченными плитками attention и нативная интеграция подготовлены в AutoMix/LADIO. Численная проверка экспорта записана в метаданных. DTTNet, SCNet и HTDemucs в релиз не включены и автоматически не запускаются; обсуждение кандидатов не делает их реализованными зависимостями.
 
-## Research questions left open
+Конвертация Core ML → ONNX сохраняет обученные параметры. Она не является новым обучением и не меняет происхождение весов. Для собственной модели следует отдельно указать архитектуру, исходный checkpoint либо обучение с нуля, обучающие данные, метод и новые результаты оценки.
 
-How much do cue accuracy, phrase protection and scene preference improve listening outcomes on a genre-balanced public corpus? Which scenes justify separation cost? What is the energy/time profile on midrange phones? Those questions require reproducible evaluation beyond source extraction and unit tests. Contributions should report data, model/frontend versions, hardware and listening methodology rather than a generic “10/10” rating.
+## Открытые исследовательские вопросы
+
+Как выбор точек, защита фраз и предпочтение сцен влияют на прослушивание жанрово разнообразного корпуса? Какие сцены оправдывают стоимость разделения? Каковы время и энергия на телефонах среднего класса? Для ответов нужны воспроизводимые данные, версии модели/фронтенда, устройство и методика прослушивания, а не общая оценка «10 из 10».
+
+Материалы, использованные при переоформлении, приведены отдельно в [описании дизайна](DESIGN.md).

@@ -1,9 +1,9 @@
-# Contributing
+# Как участвовать
 
-Start with a small reproducible musical problem: an early vocal cutoff, a late incoming attack, an inaudible return, a source-map discontinuity or an unnecessary preparation step. Include selected scene/decision metadata and a minimal synthetic signal or legally shareable audio excerpt.
+Начните с воспроизводимой музыкальной проблемы: ранний обрыв голоса, пропущенная атака B, неслышимый возврат эффекта, скачок временной карты или лишняя подготовка. Приложите выбранную сцену, метаданные решения и минимальный синтетический сигнал либо аудио, которым можно поделиться.
 
-Build the core and run CTest before submitting. If changing the analyzer, validate model/frontend checksums and compare the resulting grid and audible scene, not only global BPM. If changing DSP, compare level-matched output before, during and after the transition. Add a regression only when it captures a meaningful failure.
+Для изменений ядра соберите проект и запустите CTest. Для анализатора проверьте контрольные суммы модели и фронтенда, сравните сетку и готовую сцену, а не только BPM. Для DSP согласуйте громкость до, во время и после перехода. Новый тест полезен, когда фиксирует реальный сбой. Для документации и оформления достаточно соответствующей проверки ссылок, ресурсов и отображения.
 
-Do not submit private framework binaries, private presets, restricted model weights, commercial tracks, device logs containing account data or font files. New models need provenance, license, frontend/output contracts, hashes and measured evaluation. Model accuracy and subjective quality claims need evidence.
+Не добавляйте приватные бинарники фреймворков, пресеты с ограничениями, чужие закрытые веса, коммерческие песни, журналы с данными аккаунта и файлы шрифтов. Для новой модели нужны источник, лицензия, описание обучения/экспорта, контракт входа и выхода, контрольные суммы и измерения. Перевод модели из Core ML в ONNX сам по себе не делает её заново обученной.
 
-Keep inference and file I/O outside the audio callback. Preserve deterministic selection and inspectable veto reasons. Public C ABI changes require a compatibility review. Contributions are accepted under the project's MIT license, retaining third-party notices where applicable.
+Инференс и чтение файлов должны оставаться вне аудиопотока. Сохраняйте воспроизводимость выбора и причины отклонения сцен. Изменения C ABI требуют проверки совместимости. Вклад принимается по MIT с сохранением уведомлений о сторонних компонентах.

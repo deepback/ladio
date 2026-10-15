@@ -15,3 +15,5 @@ private/
 !examples/fixtures/*.wav
 .env
 .env.*
+node_modules/
+visuals/out/

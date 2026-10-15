@@ -1,18 +1,18 @@
 ---
-name: Reproducible engine issue
-about: Report timing, DSP, integration or preparation failures
+name: Ошибка движка
+about: Воспроизводимая проблема с таймингом, обработкой, интеграцией или подготовкой
 title: ''
 labels: bug
 assignees: ''
 ---
 
-**Release / platform / compiler**
+**Версия / платформа / компилятор**
 
-**Expected musical behavior**
+**Ожидаемое музыкальное поведение**
 
-**Observed behavior and scene ID**
+**Что произошло и идентификатор сцены**
 
-**Minimal reproduction**
-Use synthetic or legally shareable audio. Remove account data and private paths.
+**Минимальное воспроизведение**
+Используйте синтетическое аудио или материал, которым разрешено поделиться. Удалите данные аккаунта и приватные пути.
 
-**Relevant decision or error output**
+**Решение планировщика или сообщение об ошибке**

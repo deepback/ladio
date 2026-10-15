@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "examples": [
+    {"scene":"spectral","published":false,"title":"Обмен спектром","source":null,"license":null,"level_matching":null,"audio":{"originals":null,"crossfade":null,"ladio":null}},
+    {"scene":"echo","published":false,"title":"Эхо и новый вход","source":null,"license":null,"level_matching":null,"audio":{"originals":null,"crossfade":null,"ladio":null}},
+    {"scene":"loop","published":false,"title":"Удержание грува","source":null,"license":null,"level_matching":null,"audio":{"originals":null,"crossfade":null,"ladio":null}}
+  ]
+}

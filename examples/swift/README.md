@@ -1,7 +1,11 @@
-# Swift / Apple host
+# Swift: приложение для Apple-платформ
 
-Install the core and add its include directory to Swift's import paths and the library to linker settings. `include/module.modulemap` exports `LadioCore`. `Player.swift` is an ownership/control skeleton, not a complete AVAudioEngine application.
+Установите ядро, добавьте его include-каталог в пути импорта Swift, а библиотеку — в настройки линкера. `include/module.modulemap` экспортирует `LadioCore`. `Player.swift` показывает владение объектом и управление; это не готовое AVAudioEngine-приложение.
 
-For a local type check: `swiftc -typecheck -I build/install/include examples/swift/Player.swift`.
+Проверка типов:
 
-Compile the core with the appropriate Apple toolchain for macOS or iOS; package architecture slices/XCFramework in the host build. Handle session interruptions, background audio entitlement, output route and realtime callback buffers in the app. Keep the session alive while its callback can run, stop the device callback before destruction, and destroy away from the callback.
+```sh
+swiftc -typecheck -I build/install/include examples/swift/Player.swift
+```
+
+Ядро собирается соответствующим инструментарием macOS или iOS; архитектуры/XCFramework упаковывает приложение. Прерывания аудиосессии, фоновые разрешения, маршрутизация и буферы реального времени — его ответственность. Пока колбэк может выполняться, сессия должна жить. Перед уничтожением остановите колбэк устройства; само уничтожение выполняйте вне аудиопотока.

@@ -1,5 +1,7 @@
-# Python integration
+# Python: подготовка и рендер
 
-`python3 examples/python/render.py build/libladio_core.dylib build/demo/library.json build/python-demo`
+```sh
+python3 examples/python/render.py build/libladio_core.dylib build/demo/library.json build/python-demo
+```
 
-Use `.so` on Linux or the DLL on Windows. All preparation/render work is synchronous; call it from a worker in a GUI application. The wrapper uses only Python's standard library and the installed shared core. It does not load the ONNX analyzer implicitly.
+На Linux используйте `.so`, на Windows — DLL. Подготовка и рендер синхронны: в графическом приложении запускайте их в рабочем потоке. Обёртка использует стандартную библиотеку Python и разделяемое ядро. ONNX-анализатор автоматически не подключается.

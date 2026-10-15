@@ -1,7 +1,7 @@
-# Security
+# Безопасность
 
-Treat library, analysis and session files as trusted local application data. This release is not a sandbox for arbitrary remote JSON, model graphs or file paths. Hosts accepting remote assets must validate and isolate them before invoking native code.
+Файлы библиотеки, анализа и сессии рассматриваются как доверенные локальные данные приложения. LADIO 1.0 не является песочницей для произвольных удалённых JSON, графов моделей и путей. Приложение, принимающее внешние ресурсы, должно проверить и изолировать их до передачи нативному коду.
 
-Report a vulnerability through the repository's private vulnerability reporting facility if available, or open an issue containing impact and a minimal non-sensitive reproduction. Never include credentials, user music libraries or private account/device logs.
+Сообщайте об уязвимостях через приватный канал GitHub Security, если он доступен. В ином случае откройте issue с влиянием и минимальным воспроизведением без секретов. Не прикладывайте учётные данные, музыкальную библиотеку пользователя или приватные журналы устройства.
 
-Only LADIO 1.0.x is currently maintained. Audio correctness issues should include an affected scene ID, revision and reproducible evidence.
+Поддерживается ветка LADIO 1.0.x. Для ошибок звука укажите сцену, ревизию и воспроизводимый пример.

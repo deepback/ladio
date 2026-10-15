@@ -1,15 +1,18 @@
-# Changelog
+# История изменений
+
+## Оформление документации — 2026-10-15
+
+Русский стал основным языком. Переработаны сайт и пять схем, добавлены три Remotion-анимации в MP4/GIF, доступное управление движением и места для согласованных аудиосравнений. Версия звукового SDK остаётся 1.0.0. Архивы исходного релиза сохранены как исторические; актуальное оформление находится в основной ветке.
 
 ## 1.0.0 — 2026-10-15
 
-First standalone LADIO SDK release, extracted from the AutoMix project.
+Первый самостоятельный SDK LADIO, выделенный из AutoMix.
 
-- Portable C++20 planner, compiler, scene DSP and prepared-session player behind a C ABI.
-- 17 automatic DJ constructions and eight continuity/manual catalogue entries.
-- Shared tempo/source maps, independent captures/teasers, measured-bar loop handling and native-playback recovery.
-- Native filters, tempo delay, room/reverb, flanging and rhythmic gating with scene automation.
-- Optional Beat This small0 ONNX analyzer, portable relative model root and verified asset manifest.
-- CMake install/export, C/Python/Swift/Android integration examples and original synthetic demo material.
-- Open-source license notices, visual technical specification and reproducible validation tools.
+- Переносимое C++20-ядро: планировщик, компилятор, DSP сцены и плеер подготовленных сессий через C ABI.
+- 17 автоматических DJ-сцен и 8 вариантов непрерывного или ручного сведения.
+- Общие карты темпа, независимые клипы и тизеры, лупы по измеренным тактам, продолжение B в исходном режиме.
+- Нативные фильтры, темповый дилей, реверберация, фланжер и ритмический гейт с автоматизацией.
+- Дополнительный ONNX-анализатор Beat This small0 и проверяемый переносимый комплект модели.
+- Установка через CMake, примеры C/Python/Swift/Android и оригинальный синтетический материал.
 
-Private Apple research assets and app/device integrations are excluded from this public SDK.
+Приватные исследовательские ресурсы Apple и интеграции конкретных приложений/устройств в SDK не включены.

@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-message: "If you use LADIO, cite this software release and the upstream models separately."
+message: "Если используете LADIO, цитируйте этот релиз и исходные модели отдельно."
 type: software
-title: "LADIO: Music between the tracks"
+title: "LADIO: движок музыкальных переходов"
 version: 1.0.0
 date-released: 2026-10-15
 license: MIT
@@ -9,4 +9,4 @@ repository-code: "https://github.com/deepback/ladio"
 authors:
   - family-names: Sakahrov
     given-names: Igor
-abstract: "An embeddable C++20 engine for event-based musical transition planning and execution, with optional Beat This ONNX analysis."
+abstract: "Встраиваемый движок на C++20 для планирования и исполнения музыкальных переходов с дополнительным ONNX-анализом Beat This."

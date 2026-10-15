@@ -11,7 +11,7 @@
       "license": "MIT",
       "source": "https://github.com/CPJKU/beat_this",
       "checkpoint": "small0",
-      "purpose": "beat and downbeat logits; not source separation or transcription",
+      "purpose": "Логиты долей и сильных долей; не разделение источников и не распознавание текста",
       "precision": "float32",
       "input": {
         "name": "spect",
