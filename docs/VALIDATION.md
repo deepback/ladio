@@ -7,7 +7,10 @@ Evidence recorded on 2026-10-15. [Machine-readable record](validation.json). The
 | Portable core CTest | 7/7 passing locally | Core, scene, independent DJ, harmony, measured grid, C ABI, model integrity |
 | Optional ONNX build | Successful on macOS arm64 | Public C analyzer API and native CLI linked to external ONNX Runtime |
 | Android cross-compilation | Successful, NDK 27.3, API 26, arm64-v8a | Core library; no phone runtime claim |
-| Installed C consumer | Prints `LADIO 1.0.0 / C ABI 1` | Separate `find_package(Ladio)` project, installed headers/target |
+| iOS cross-compilation | Successful, iOS 27 SDK, arm64, deployment target 15.0 | Static core; no device run |
+| Installed C consumer | Prints `LADIO 1.0.0 / C ABI 1` | Separate `find_package(Ladio)` projects with both shared and static installed cores |
+| Installed ONNX analyzer | Real-audio entry analysis completed with external runtime | Installed executable and its library dependencies |
+| Python facade | Version and native error propagation checked | ctypes boundary; no real-time Python audio promise |
 | Swift example | Type-checks with installed C module | C import/ownership skeleton; no device audio claim |
 | Public model bundle | 1 ONNX model, 4 hashed execution assets | Byte sizes, SHA-256, registration and relative-path integrity |
 | Real-audio analysis | Entry scope completed; 240 beats, 60 downbeats, 7 cues | Local 248.04 s input; private audio and full analysis are not distributed |

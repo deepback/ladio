@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(LadioConsumer LANGUAGES C)
+project(LadioConsumer LANGUAGES C CXX)
 find_package(Ladio 1 CONFIG REQUIRED)
 add_executable(ladio_consumer main.c)
 target_link_libraries(ladio_consumer PRIVATE Ladio::Core)

@@ -34,6 +34,8 @@ LADIO выделен из нашего AutoMix в самостоятельный
 
 ## Собрать и встроить
 
+В [релизе 1.0.0](https://github.com/deepback/ladio/releases/tag/v1.0.0) доступны исходники с моделью и готовые SDK ядра для macOS arm64, iOS arm64 и Android arm64. Опциональный ONNX-анализатор собирается отдельно.
+
 ```sh
 git clone https://github.com/deepback/ladio.git
 cd ladio

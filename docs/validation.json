@@ -58,5 +58,18 @@
   "hosted_ci": {
     "executed": false,
     "reason": "GitHub account billing lock; jobs did not start"
+  },
+  "ios_core": {
+    "built": true,
+    "architecture": "arm64",
+    "deployment_target": "15.0",
+    "sdk": "iOS 27.0",
+    "device_run": false
+  },
+  "installed_static_c_consumer": true,
+  "installed_analyzer_real_audio": true,
+  "python_facade": {
+    "version": true,
+    "native_error_propagation": true
   }
 }

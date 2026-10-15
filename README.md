@@ -42,7 +42,9 @@ Run `ladio catalog` for the machine-readable source of truth. The [catalogue](do
 
 <img src="docs/assets/tempo-map.svg" alt="Illustrative shared tempo curve: 120 to 124 BPM with coordinated deck rates" width="100%">
 
-## Build in two minutes
+## Build the engine
+
+[Release 1.0.0](https://github.com/deepback/ladio/releases/tag/v1.0.0) provides the complete source/model archive and core SDK packages for macOS arm64, iOS arm64 and Android arm64. SDK packages contain the core library, headers, model assets and notices; build the optional ONNX analyzer separately.
 
 Requirements: a 64-bit native platform, a C++20 compiler, CMake 3.22+ and Python 3.9+ for asset validation. The portable core has no ONNX Runtime dependency.
 
@@ -73,7 +75,7 @@ The fixture supplies known timing annotations. It demonstrates the planner/rende
 
 The repository includes the redistributable **Beat This `small0` FP32 ONNX model**, mel frontend table, metadata, upstream license and SHA-256 manifest. The checkpoint was trained by its upstream authors; LADIO provides the export and native integration. No ensemble, Whisper or separator is loaded by default.
 
-Install the ONNX Runtime C/C++ SDK for your platform, then:
+Install the ONNX Runtime C/C++ SDK (tested with 1.22.x) for your platform, then:
 
 ```sh
 cmake -S . -B build/onnx -DCMAKE_BUILD_TYPE=Release \
@@ -84,7 +86,7 @@ build/onnx/src/analysis/onnx/ladio_analyze analyze song.f32 models song.json ful
 
 The analyzer accepts 44.1 kHz stereo float32 little-endian PCM, 20 seconds–6 minutes. Use `entry` or `exit` instead of `full` when preparing a limited scope. The host decodes its own audio. See [integration](docs/INTEGRATION.md) for a complete annotated-library flow and deployment dependencies.
 
-## Embed, rather than rebuild a player
+## Embed LADIO
 
 ```cmake
 find_package(Ladio 1 CONFIG REQUIRED)
