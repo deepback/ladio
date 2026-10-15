@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1210" height="420" viewBox="0 0 1210 420" role="img" aria-labelledby="title">
+<title id="title">Included MIT-licensed Beat This small0 ONNX model</title><style>text{font-family:-apple-system, BlinkMacSystemFont, SF Pro Display, SF Pro, Helvetica Neue, Arial, sans-serif;fill:#15171d}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.muted{fill:#717783}</style>
+<rect width="1210" height="420" rx="28" fill="#f7f8fa"/>
+<text x="65" y="65" font-size="16" letter-spacing="2" class="mono muted">MODEL NOTE 01 / OPEN WEIGHTS</text>
+<text x="65" y="143" font-size="47" font-weight="650">Small model. Explicit responsibility.</text>
+<text x="65" y="201" font-size="23" class="muted">Beat This small0 estimates beats and downbeats.</text>
+<text x="65" y="236" font-size="23" class="muted">LADIO decides what to do with them.</text>
+<path d="M65 278H1145" stroke="#dce2eb"/>
+<text x="65" y="325" font-size="30" font-weight="650">9.55 MB</text><text x="65" y="357" font-size="15" class="mono muted">FP32 ONNX</text>
+<text x="410" y="325" font-size="30" font-weight="650">≤ 2 threads</text><text x="410" y="357" font-size="15" class="mono muted">INFERENCE CAP</text>
+<text x="850" y="325" font-size="30" font-weight="650">MIT</text><text x="850" y="357" font-size="15" class="mono muted">CODE + PUBLISHED WEIGHTS</text></svg>

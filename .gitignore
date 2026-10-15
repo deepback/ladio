@@ -1,0 +1,17 @@
+.DS_Store
+build*/
+dist/
+.build/
+.swiftpm/
+.venv/
+__pycache__/
+*.pyc
+*.pending
+local-models/
+private/
+*.f32
+!models/**/beat-mel-filterbank.f32
+*.wav
+!examples/fixtures/*.wav
+.env
+.env.*

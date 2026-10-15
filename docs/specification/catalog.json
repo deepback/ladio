@@ -1,0 +1,252 @@
+[
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_seamless",
+    "preferred_bars": 2,
+    "repeat": false,
+    "reverb": false,
+    "shape": "plain",
+    "title": "Непрерывный стык"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_equal_power",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": false,
+    "shape": "plain",
+    "title": "Равномерное наложение"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_late_entry",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": false,
+    "shape": "late",
+    "title": "Поздний короткий вход"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_splice",
+    "preferred_bars": 2,
+    "repeat": false,
+    "reverb": false,
+    "shape": "splice",
+    "title": "Монтаж на границе фразы"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_overlap",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": false,
+    "shape": "plain",
+    "title": "Естественное перекрытие"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_room_overlap",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": true,
+    "shape": "plain",
+    "title": "Перекрытие с пространством"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_ring_out",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": false,
+    "shape": "late",
+    "title": "Сохранить естественный хвост"
+  },
+  {
+    "automatic_candidate": false,
+    "delay": false,
+    "id": "dj_room_ring",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": true,
+    "shape": "late",
+    "title": "Пространственный хвост"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_short_sweep",
+    "preferred_bars": 2,
+    "repeat": false,
+    "reverb": false,
+    "shape": "sweep",
+    "title": "Короткая передача спектра"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_phrase_exchange",
+    "preferred_bars": 8,
+    "repeat": false,
+    "reverb": false,
+    "shape": "phrase",
+    "title": "Сведение музыкальных фраз"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_elastic_entry",
+    "preferred_bars": 8,
+    "repeat": false,
+    "reverb": false,
+    "shape": "late",
+    "title": "Подведение к сильному входу"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_spectral_sweep",
+    "preferred_bars": 8,
+    "repeat": false,
+    "reverb": false,
+    "shape": "sweep",
+    "title": "Уход под воду и раскрытие"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_band_expansion",
+    "preferred_bars": 8,
+    "repeat": false,
+    "reverb": false,
+    "shape": "expand",
+    "title": "Расширение полосы B"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_echo_filter",
+    "preferred_bars": 8,
+    "repeat": false,
+    "reverb": false,
+    "shape": "sweep",
+    "title": "Фильтр и развивающееся эхо"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_room_filter",
+    "preferred_bars": 8,
+    "repeat": false,
+    "reverb": true,
+    "shape": "expand",
+    "title": "Фильтр и пространственный мост"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_long_sweep",
+    "preferred_bars": 16,
+    "repeat": false,
+    "reverb": false,
+    "shape": "sweep",
+    "title": "Длинная передача спектра"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_soft_room",
+    "preferred_bars": 10,
+    "repeat": false,
+    "reverb": true,
+    "shape": "soft",
+    "title": "Мягкое раскрытие через пространство"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_voice_clearance",
+    "preferred_bars": 10,
+    "repeat": false,
+    "reverb": true,
+    "shape": "voice",
+    "title": "Развести вокальные фразы"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_rhythm_echo",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": false,
+    "shape": "rhythm",
+    "title": "Ритмическая фраза в эхо"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_hook_echo",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": false,
+    "shape": "hook",
+    "title": "Эхо мотива перед новым входом"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_dance_build",
+    "preferred_bars": 18,
+    "repeat": true,
+    "reverb": true,
+    "shape": "build",
+    "title": "Длинное развитие с повторителем"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_groove_loop",
+    "preferred_bars": 4,
+    "repeat": true,
+    "reverb": false,
+    "shape": "loop",
+    "title": "Удержание и передача грува"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_harmonic_blur",
+    "preferred_bars": 8,
+    "repeat": true,
+    "reverb": true,
+    "shape": "blur",
+    "title": "Повтор и освобождение гармонии"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": false,
+    "id": "dj_room_release",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": true,
+    "shape": "release",
+    "title": "Раскрытие из реверберации"
+  },
+  {
+    "automatic_candidate": true,
+    "delay": true,
+    "id": "dj_pulse_transition",
+    "preferred_bars": 4,
+    "repeat": false,
+    "reverb": true,
+    "shape": "pulse",
+    "title": "Подведение к новому пульсу"
+  }
+]

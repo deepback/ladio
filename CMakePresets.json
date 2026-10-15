@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {"name": "release", "displayName": "Portable core", "generator": "Ninja", "binaryDir": "${sourceDir}/build/release", "cacheVariables": {"CMAKE_BUILD_TYPE": "Release", "BUILD_SHARED_LIBS": "ON"}},
+    {"name": "analysis", "displayName": "Core + ONNX analysis", "inherits": "release", "binaryDir": "${sourceDir}/build/analysis", "cacheVariables": {"LADIO_BUILD_ONNX": "ON"}}
+  ],
+  "buildPresets": [{"name": "release", "configurePreset": "release"}, {"name": "analysis", "configurePreset": "analysis"}],
+  "testPresets": [{"name": "release", "configurePreset": "release", "output": {"outputOnFailure": true}}, {"name": "analysis", "configurePreset": "analysis", "output": {"outputOnFailure": true}}]
+}

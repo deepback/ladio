@@ -1,0 +1,53 @@
+{
+  "release": "1.0.0",
+  "date": "2026-10-15",
+  "host": "macOS arm64",
+  "local_core_ctest": {
+    "passed": 7,
+    "total": 7
+  },
+  "optional_analyzer_build": true,
+  "ndk_core": {
+    "abi": "arm64-v8a",
+    "api": 26,
+    "ndk": "27.3.13750724",
+    "built": true,
+    "device_run": false
+  },
+  "installed_c_consumer": true,
+  "swift_example_typecheck": true,
+  "model_assets_verified": 4,
+  "onnx_models": 1,
+  "real_audio_analysis": {
+    "scope": "entry",
+    "duration_seconds": 248.03555555555556,
+    "tempo": 124.99495807784109,
+    "beats_in_scope": 240,
+    "downbeats_in_scope": 60,
+    "cues": 7,
+    "private_audio_distributed": false
+  },
+  "synthetic_render": {
+    "block_deadline_ms": 11.609977324263038,
+    "channels": 2,
+    "frames": 8708620,
+    "nonfinite": 0,
+    "note": "Worker measurements; hardware callback only consumes bounded SPSC PCM",
+    "peak_dbfs": -9.93279286408961,
+    "render_seconds": 1.646564958,
+    "rms_dbfs": -24.73342253942446,
+    "sample_rate": 44100,
+    "schema_version": 1,
+    "seconds": 197.47437641723357,
+    "worker_block_frames": 512,
+    "worker_p50_ms": 0.01825,
+    "worker_p95_ms": 0.250792,
+    "worker_p99_ms": 0.296167,
+    "worker_worst_ms": 4.210208
+  },
+  "limitations": [
+    "No phone runtime/thermal acceptance",
+    "No listening study or Apple sonic parity claim",
+    "One repetitive synthetic signal was rejected by measured-grid validation; a render fixture with known annotations is used for renderer verification"
+  ]
+}

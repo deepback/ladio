@@ -1,0 +1,19 @@
+{
+  "file": "beat-this-small0.onnx",
+  "checkpoint": "small0",
+  "source_sha256": "6074be2c4d490c5f6101fcc374a1ec72ae93456e23bb6019783b849f5dc7d47b",
+  "sha256": "0e5c1164d2528b5ca6ef9dda2cee333c2252e4b3ba158da04887214701886aa0",
+  "bytes": 9547177,
+  "license": "MIT",
+  "source": "https://github.com/CPJKU/beat_this",
+  "precision": "float32",
+  "chunk_frames": 1500,
+  "border_frames": 6,
+  "overlap": "keep_first",
+  "attention": "exact-full-context-query-tiles-128-batch-4",
+  "export_parity_max_abs_logit_error": {
+    "257": 4.76837158203125e-06,
+    "749": 5.0067901611328125e-06,
+    "1500": 1.1205673217773438e-05
+  }
+}

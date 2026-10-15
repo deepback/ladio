@@ -1,0 +1,5 @@
+module LadioCore {
+    header "ladio/ladio.h"
+    header "ladio/version.h"
+    export *
+}

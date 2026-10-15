@@ -1,0 +1,59 @@
+{
+  "format": "ladio-model-kit",
+  "schema_version": 1,
+  "release": "1.0.0",
+  "runtime": {
+    "model_directory": "beat-this-small0"
+  },
+  "models": {
+    "beat-this-small0": {
+      "file": "beat-this-small0/beat-this-small0.onnx",
+      "license": "MIT",
+      "source": "https://github.com/CPJKU/beat_this",
+      "checkpoint": "small0",
+      "purpose": "beat and downbeat logits; not source separation or transcription",
+      "precision": "float32",
+      "input": {
+        "name": "spect",
+        "shape": [
+          1,
+          "frames",
+          128
+        ],
+        "max_frames": 1500
+      },
+      "outputs": [
+        "beat",
+        "downbeat"
+      ],
+      "frontend": {
+        "sample_rate": 22050,
+        "fft_size": 1024,
+        "hop_length": 441,
+        "mel_bands": 128,
+        "log": "log1p(1000 * mel)",
+        "border_frames": 6,
+        "overlap": "keep_first"
+      },
+      "upstream_checkpoint_sha256": "6074be2c4d490c5f6101fcc374a1ec72ae93456e23bb6019783b849f5dc7d47b"
+    }
+  },
+  "files": {
+    "beat-this-small0/LICENSE": {
+      "bytes": 1113,
+      "sha256": "909ab6549794a18e9bb243aacfadda4a5f308436fc2846f350755c53c4f06ae1"
+    },
+    "beat-this-small0/beat-mel-filterbank.f32": {
+      "bytes": 262656,
+      "sha256": "57cf87a6ccce2c80898823c13ce260ec5a43b957c0671cfd9233d269f8dc14f2"
+    },
+    "beat-this-small0/beat-model.json": {
+      "bytes": 630,
+      "sha256": "8747c328bbd0a86478e23d2d7084ad5c2a364d3e0021e32b64dccc5c422e0090"
+    },
+    "beat-this-small0/beat-this-small0.onnx": {
+      "bytes": 9547177,
+      "sha256": "0e5c1164d2528b5ca6ef9dda2cee333c2252e4b3ba158da04887214701886aa0"
+    }
+  }
+}
