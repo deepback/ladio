@@ -29,8 +29,8 @@ build/ladio prepare build/demo/library.json build/demo/mix dj 42
 build/ladio render build/demo/mix/session.json build/demo/mix.wav build/demo/report.json
 ```
 
-Model portability must be checked from a second source directory, including a path containing spaces. Installed-package consumers must not include headers from the original AutoMix project. Public release archives contain source/model assets; generated PCM, commercial audio, temporary SDK binaries and device logs are excluded.
+Model integrity and a clean static-core build also passed from a cloned second source directory with spaces in its name. Installed-package consumers must not include headers from the original AutoMix project. Public release archives contain source/model assets; generated PCM, commercial audio, temporary SDK binaries and device logs are excluded.
 
 ## Remaining acceptance
 
-The Android core build is not an APK or Pixel playback test. iOS physical playback, mobile background lifecycle, sustained thermal/battery cost and deadline guarantees are not established by this packaging release. Listening quality on arbitrary songs, learned phrase boundaries and equivalence to Apple's undisclosed internal planner remain unproven. Windows/Linux results should be read from the exact CI revision rather than inferred from this Mac's build.
+The Android core build is not an APK or Pixel playback test. iOS physical playback, mobile background lifecycle, sustained thermal/battery cost and deadline guarantees are not established by this packaging release. Listening quality on arbitrary songs, learned phrase boundaries and equivalence to Apple's undisclosed internal planner remain unproven. GitHub-hosted macOS/Linux/Windows jobs could not start because GitHub reported an account billing lock. The workflow is included, but those hosted results are not passing-build evidence.

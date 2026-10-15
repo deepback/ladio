@@ -27,15 +27,18 @@ inline double db(double v) { return std::pow(10,v/20); }
 inline uint64_t hash64(uint64_t x) { x+=0x9e3779b97f4a7c15ULL; x=(x^(x>>30))*0xbf58476d1ce4e5b9ULL; x=(x^(x>>27))*0x94d049bb133111ebULL; return x^(x>>31); }
 inline double random01(uint64_t seed) { return double(hash64(seed)>>11)*0x1.0p-53; }
 inline Json readJson(const std::filesystem::path &p) { std::ifstream f(p); if(!f) throw std::runtime_error("Cannot read "+p.string()); Json j; f>>j; return j; }
-inline void writeJson(const std::filesystem::path &p,const Json &j) {
-    if(!p.parent_path().empty())std::filesystem::create_directories(p.parent_path()); auto tmp=p; tmp+=".pending";
-    { std::ofstream f(tmp); if(!f) throw std::runtime_error("Cannot write "+p.string()); f<<j.dump(2)<<'\n'; if(!f)throw std::runtime_error("Write failed "+p.string()); }
+inline void publishFile(const std::filesystem::path &tmp,const std::filesystem::path &p) {
 #ifdef _WIN32
     if(!MoveFileExW(tmp.c_str(),p.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))
         throw std::runtime_error("Cannot publish "+p.string());
 #else
     std::filesystem::rename(tmp,p);
 #endif
+}
+inline void writeJson(const std::filesystem::path &p,const Json &j) {
+    if(!p.parent_path().empty())std::filesystem::create_directories(p.parent_path()); auto tmp=p; tmp+=".pending";
+    { std::ofstream f(tmp); if(!f) throw std::runtime_error("Cannot write "+p.string()); f<<j.dump(2)<<'\n'; if(!f)throw std::runtime_error("Write failed "+p.string()); }
+    publishFile(tmp,p);
 }
 inline std::filesystem::path resolve(const std::filesystem::path &base,const std::string &p) { std::filesystem::path v(p); return v.is_absolute()?v:base/v; }
 struct Cue {

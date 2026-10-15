@@ -108,7 +108,7 @@ static void prepareBus(const Source&s,double sourceStart,const TimeMap&map,doubl
         Frame first=std::llround(join*sr),length=std::min<Frame>(std::llround(nativeBlend*sr),n-first);
         if(canRejoin)rejoinNative(tmp,channels,sr,n,first,length,[&](Frame f,int c){Frame raw=std::llround((sourceStart+map.sourceAt(double(f)/sr))*sr);return reader.value(raw,layout.empty()?c:layout[c]);});
     }
-    std::filesystem::rename(tmp,path);
+    publishFile(tmp,path);
 }
 void prepareOriginalVoice(const Source&s,double start,const TimeMap&map,double seconds,int sr,const std::filesystem::path&path,const std::function<bool()>&cancel,double attackOutput,double attackSource,double nativeJoin){
     prepareBus(s,start,map,seconds,sr,path,false,cancel,std::llround((start+map.sourceAt(seconds))*sr),2,attackOutput,attackSource,Json{},nativeJoin);
@@ -221,7 +221,7 @@ static Json previewScene(const Compiled&compiled,const std::vector<Track>&tracks
         }
         pos+=n;
     }
-    if(!capture.empty()){if(!saved)throw std::runtime_error("Cannot save accepted scene");saved.close();std::filesystem::rename(temporary,capture);}
+    if(!capture.empty()){if(!saved)throw std::runtime_error("Cannot save accepted scene");saved.close();publishFile(temporary,capture);}
     double ar=std::sqrt(aEnergy/std::max<Frame>(1,hybridN)),br=std::sqrt(bEnergy/std::max<Frame>(1,hybridN)),dr=std::sqrt(drumEnergy/std::max<Frame>(1,hybridN));
     Json levels=Json::array();int consecutive=0,longest=0;
     for(const auto&bar:barLevels){double a=std::sqrt(bar.a/std::max<Frame>(1,bar.samples)),b=std::sqrt(bar.b/std::max<Frame>(1,bar.samples)),d=std::sqrt(bar.d/std::max<Frame>(1,bar.samples));bool audible=bar.samples>=bar.expected*1.98&&a>.001&&b>.001&&d>.005&&b/std::max(.001,a)>=db(-24);consecutive=audible?consecutive+1:0;longest=std::max(longest,consecutive);levels.push_back({{"A_rms",a},{"B_rms",b},{"drums_rms",d},{"complete_bar",bar.samples>=bar.expected*1.98},{"audible",audible}});}

@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/assets/hero.svg" alt="LADIO — Music between the tracks" width="100%"></p>
 
-<p align="center"><a href="https://github.com/deepback/ladio/actions/workflows/ci.yml"><img src="https://github.com/deepback/ladio/actions/workflows/ci.yml/badge.svg" alt="Build"></a> <img src="https://img.shields.io/badge/version-1.0.0-111827" alt="Version 1.0.0"> <img src="https://img.shields.io/badge/core-MIT-111827" alt="MIT core"> <img src="https://img.shields.io/badge/C%2B%2B-20-111827" alt="C++20"></p>
+<p align="center"><a href="docs/VALIDATION.md"><img src="https://img.shields.io/badge/local_tests-7%2F7-27764b" alt="Local tests 7 of 7"></a> <img src="https://img.shields.io/badge/version-1.0.0-111827" alt="Version 1.0.0"> <img src="https://img.shields.io/badge/core-MIT-111827" alt="MIT core"> <img src="https://img.shields.io/badge/C%2B%2B-20-111827" alt="C++20"></p>
 
 <p align="center"><a href="README.ru.md">Русский</a> · <a href="https://deepback.github.io/ladio/">Visual paper</a> · <a href="docs/specification/ENGINE.md">Engine specification</a> · <a href="docs/INTEGRATION.md">Embed LADIO</a> · <a href="models/beat-this-small0/MODEL_CARD.md">Model card</a></p>
 

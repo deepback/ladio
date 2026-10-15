@@ -49,5 +49,14 @@
     "No phone runtime/thermal acceptance",
     "No listening study or Apple sonic parity claim",
     "One repetitive synthetic signal was rejected by measured-grid validation; a render fixture with known annotations is used for renderer verification"
-  ]
+  ],
+  "relocation": {
+    "model_integrity": true,
+    "static_core_build": true,
+    "path_contains_spaces": true
+  },
+  "hosted_ci": {
+    "executed": false,
+    "reason": "GitHub account billing lock; jobs did not start"
+  }
 }
